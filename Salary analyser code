@@ -1,0 +1,49 @@
+import pandas as pd
+
+# Define the context as a string
+context = """<context>
+...
+</context>"""
+
+# Split the context into lines
+lines = context.strip().split("\n")
+
+# Define an empty list to store the data
+data = []
+
+# Loop through the lines and extract the data
+for line in lines:
+    if "Base Pay" in line:
+        # Extract the employee name
+        name = line.split(" ")[-1].strip()
+    elif "Base Pay" in line and "ld" not in line:
+        # Extract the base pay amount
+        base_pay = float(line.split(" ")[-2].strip().replace(",", ""))
+    elif "Total Benefits" in line:
+        # Extract the total benefits amount
+        benefits = float(line.split(" ")[-2].strip().replace(",", ""))
+    elif "Other Pay" in line:
+        # Extract the other pay amount
+        other_pay = float(line.split(" ")[-2].strip().replace(",", ""))
+    elif "Overtime Pay" in line:
+        # Extract the overtime pay amount
+        overtime_pay = float(line.split(" ")[-2].strip().replace(",", ""))
+    elif "Total Pay" in line:
+        # Extract the total pay amount
+        total_pay = float(line.split(" ")[-2].strip().replace(",", ""))
+    elif "Job Title" in line:
+        # Extract the job title
+        job_title = line.split(" ")[-1].strip()
+    elif "Id" in line:
+        # Extract the employee ID
+        id = line.split(" ")[-1].strip()
+        
+    # If all the data for a row is collected, add it to the list
+    if name and base_pay and benefits and other_pay and overtime_pay and total_pay and job_title and id:
+        data.append([id, job_title, name, base_pay, benefits, other_pay, overtime_pay, total_pay])
+
+# Convert the list to a data frame
+df = pd.DataFrame(data, columns=["ID", "Job Title", "Name", "Base Pay", "Benefits", "Other Pay", "Overtime Pay", "Total Pay"])
+
+# Display the data frame
+print(df)
